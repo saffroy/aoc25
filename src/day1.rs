@@ -41,10 +41,8 @@ pub fn parse_2(text: &str) -> i64 {
             if pos > 0 && count >= pos {
                 count_zero += 1
             }
-        } else {
-            if count + pos >= 100 {
-                count_zero += 1
-            }
+        } else if count + pos >= 100 {
+            count_zero += 1
         }
 
         pos += if right { count } else { 100-count };
