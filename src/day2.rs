@@ -79,8 +79,34 @@ pub fn parse_1(text: &str) -> i64 {
         .sum()
 }
 
-pub fn parse_2(_text: &str) -> i64 {
-    0
+fn is_inval2(n: &i64) -> bool {
+    let s = n.to_string();
+    let s_len = s.len();
+    for prefix_len in 1..s_len/2+1 {
+        if s_len.is_multiple_of(prefix_len) {
+            let prefix = &s[0..prefix_len];
+            let reps = s_len / prefix_len;
+            let is_repeat = (0..reps)
+                .all(|k| prefix == &s[k*prefix_len..(k+1)*prefix_len]);
+            if is_repeat {
+                return true
+            }
+        }
+    }
+    false
+}
+
+fn sum_inval2(lo: i64, hi: i64) -> i64 {
+    (lo..hi+1)
+        .filter(is_inval2)
+        .sum()
+}
+
+pub fn parse_2(text: &str) -> i64 {
+    parse_text(text)
+        .into_iter()
+        .map(|(lo, hi)| sum_inval2(lo, hi))
+        .sum()
 }
 
 #[cfg(test)]
@@ -96,7 +122,7 @@ mod tests {
     }
     #[test]
     fn test_parse2() {
-        assert_eq!(parse_2(&INPUT_TEXT_1), 6);
+        assert_eq!(parse_2(&INPUT_TEXT_1), 4174379265);
     }
 
     #[test]
@@ -114,5 +140,10 @@ mod tests {
     #[test]
     fn test_count_inval() {
         assert_eq!(sum_inval(11, 22), 11+22);
+    }
+    #[test]
+    fn test_count_inval2() {
+        assert_eq!(sum_inval2(11, 22), 11+22);
+        assert_eq!(sum_inval2(95, 115), 99+111);
     }
 }
