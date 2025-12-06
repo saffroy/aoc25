@@ -1,4 +1,5 @@
 use std::cmp;
+use std::collections::HashMap;
 
 fn parse_text(text: &str) -> Vec<Vec<u8>> {
     text.lines()
@@ -38,8 +39,38 @@ pub fn parse_1(text: &str) -> i64 {
         .sum()
 }
 
-pub fn parse_2(_text: &str) -> i64 {
-    0
+// joltage2 requires memoization, its cache is indexed by:
+// (bank length, digits)
+type Cache = HashMap<(usize, u32), i64>;
+
+fn joltage2(bank: &[u8], digits: u32, cache: &mut Cache) -> i64 {
+    let key = (bank.len(), digits);
+
+    if let Some(v) = cache.get(&key) {
+        *v
+    } else {
+        let v = if digits > bank.len() as u32 {
+            0
+        } else if digits == 1 {
+            *bank[..]
+                .iter()
+                .max()
+                .unwrap() as i64
+        } else {
+            cmp::max(bank[0] as i64 * 10i64.pow(digits-1)
+                     + joltage2(&bank[1..], digits-1, cache),
+                     joltage2(&bank[1..], digits, cache))
+        };
+        cache.insert(key, v);
+        v
+    }
+}
+
+pub fn parse_2(text: &str) -> i64 {
+    parse_text(text)
+        .into_iter()
+        .map(|bank| joltage2(&bank, 12, &mut HashMap::new()))
+        .sum()
 }
 
 #[cfg(test)]
@@ -53,11 +84,11 @@ mod tests {
 818181911112111
 ";
     #[test]
-    fn test1_parse1() {
+    fn test3_parse1() {
         assert_eq!(parse_1(&INPUT_TEXT_1), 357);
     }
     #[test]
-    fn test1_parse2() {
-        assert_eq!(parse_2(&INPUT_TEXT_1), 6);
+    fn test3_parse2() {
+        assert_eq!(parse_2(&INPUT_TEXT_1), 3121910778619);
     }
 }
