@@ -3,6 +3,7 @@ use std::fs;
 
 mod day1;
 mod day2;
+mod day3;
 
 fn main() {
     // Get command line arguments
@@ -28,6 +29,11 @@ fn main() {
         "2" => match &part[..] {
             "1" => day2::parse_1(&content),
             "2" => day2::parse_2(&content),
+            _ => panic!("Invalid part {}", part)
+        },
+        "3" => match &part[..] {
+            "1" => day3::parse_1(&content),
+            "2" => day3::parse_2(&content),
             _ => panic!("Invalid part {}", part)
         },
         _ => panic!("Invalid day {}", day)
