@@ -10,6 +10,7 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+mod day10;
 
 fn main() {
     // Get command line arguments
@@ -70,6 +71,11 @@ fn main() {
         "9" => match &part[..] {
             "1" => day9::parse_1(&content),
             "2" => day9::parse_2(&content),
+            _ => panic!("Invalid part {}", part)
+        },
+        "10" => match &part[..] {
+            "1" => day10::parse_1(&content),
+            "2" => day10::parse_2(&content),
             _ => panic!("Invalid part {}", part)
         },
         _ => panic!("Invalid day {}", day)
