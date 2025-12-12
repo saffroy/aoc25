@@ -6,4 +6,5 @@ edition = "2024"
 [dependencies]
 image = "0.25.9"
 itertools = "0.14.0"
+lru = "0.16.2"
 regex = "1.12.2"
